@@ -1,0 +1,46 @@
+Write a program for reading blog content. It needs to make requests to the server and display all blog posts and their comments. Request URL’s:
+
+Posts - http://localhost:3030/jsonstore/blog/posts
+
+Comments - http://localhost:3030/jsonstore/blog/comments
+
+The button with ID "btnLoadPosts" should make a GET request to "/posts". The response from the server will be an Object of objects.
+
+Each object will be in the following format:
+
+{
+
+body: {postBody},
+
+id: {postId},
+
+title: {postTitle}
+
+}
+
+Create an <option> for each post using its object key as value and current object title property as text inside the node with ID "posts".
+
+
+
+When the button with ID "btnViewPost" is clicked, a GET request should be made to:
+
+· "/posts" to retrieve all available posts and find the selected post from the dropdown menu. This request returns an object where each key represents a post ID, and each value contains post details (title and body).
+
+· "/comments" to retrieve all comments. This request returns an object of objects, where each comment includes a postId field. The response is then filtered to include only comments that match the selected post's ID.
+
+
+Each object will be in the following format:
+
+{
+
+id: {commentId},
+
+postId: {postId},
+
+text: {commentText}
+
+}
+
+You have to find this comments that are for the current post (check the postId property)
+
+Display the post title inside h1 with ID "post-title" and the post content inside p with ID "post-body". Display each comment as a <li> inside ul with ID "post-comments". Do not forget to clear its content beforehand.
