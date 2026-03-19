@@ -1,38 +1,58 @@
 function attachEvents() {
-    document.getElementById('submit').addEventListener('click', sendMessege);
-    document.getElementById('refresh').addEventListener('click', showMesseges);
+    const BASE_URL = 'http://localhost:3030/jsonstore/messenger';
 
-    async function sendMessege()
+    const textAreaRef = document.getElementById('messages');
+    const nameRef = document.querySelector('input[name="author"]');
+    const msgRef = document.querySelector('input[name="content"]');
+
+    onLoad();
+
+
+    document.getElementById('submit').addEventListener('click', onSubmit);
+    document.getElementById('refresh').addEventListener('click', onLoad);
+
+    async function onLoad()
     {
-        const author = document.getElementsByName('author')[0];
-        const messege = document.getElementsByName('content')[0];
+        try{
+            textAreaRef.value = '';
+            const response = await fetch(BASE_URL);
+            const data = await response.json();
 
-        const response = await fetch('http://localhost:3030/jsonstore/messenger', {
-            method: 'POST', 
-            headers: {'Content-Type': 'application/json'}, 
-            body: JSON.stringify({author: author.value, content: messege.value})
-        });
-
-        if(!response.ok)
-        {
-            alert('Error!');
+            Object.values(data).forEach(msg => {
+                textAreaRef.value += `${msg.author}: ${msg.content}\n`;
+            });
         }
-
-        author.value = '';
-        messege.value = '';
+        catch (error){
+            textAreaRef.value = 'No Messages';
+        }
     }
 
-    async function showMesseges()
+    async function onSubmit(e)
     {
-        const response = await fetch('http://localhost:3030/jsonstore/messenger');
-        const data = await response.json();
+        const name = nameRef.value;
+        const msg = msgRef.value;
 
-        const messenger = document.getElementById('messages');
-        messenger.value = '';
-        
-        Object.values(data).forEach(messege => {
-            messenger.value += `${messege.author}: ${messege.content}\n`;
+        nameRef.value = '';
+        msgRef.value = '';
+
+        if(!name || !msg)
+        {
+            return;
+        }
+
+        const data = {
+            author: name,
+            content: msg
+        };
+
+        await fetch(BASE_URL, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
         });
+        onLoad();
     }
 }
 
