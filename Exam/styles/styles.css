@@ -1,0 +1,8 @@
+@import "navigation.css";
+@import "form.css";
+@import "dashboard.css";
+@import "details.css";
+
+.hidden {
+  display: none !important;
+}

@@ -2,10 +2,9 @@
   "name": "02.bus-schedule",
   "version": "1.0.0",
   "description": "",
-  "type": "module",
   "main": "app.js",
   "scripts": {
-    "test": "mocha ./tests/e2e.test.js",
+    "test": "mocha tests",
     "start": "http-server -a localhost -p 3000 -P http://localhost:3000? -c-1"
   },
   "keywords": [],
@@ -13,7 +12,7 @@
   "license": "ISC",
   "devDependencies": {
     "http-server": "14.1.1",
-    "playwright-chromium": "1.9.2",
+    "playwright-chromium": "^1.36.0",
     "mocha": "8.3.2",
     "chai": "4.3.4"
   }

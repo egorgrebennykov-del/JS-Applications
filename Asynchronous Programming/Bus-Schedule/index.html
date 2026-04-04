@@ -11,11 +11,18 @@
     <div id="schedule">
         <div id="info"><span class="info">Not Connected</span></div>
         <div id="controls">
-            <input id="depart" value="Depart" type="button" onclick="result.depart()">
-            <input id="arrive" value="Arrive" type="button" onclick="result.arrive()" disabled="true">
+            <input id="depart" type="button" value="Depart">
+            <input id="arrive" type="button" value="Arrive" disabled>
         </div>
     </div>
+
     <script src="./app.js"></script>
+    <script>
+        result.then(r => {
+            document.getElementById('depart').addEventListener('click', () => r.depart());
+            document.getElementById('arrive').addEventListener('click', () => r.arrive());
+        });
+    </script>
 </body>
 
 </html>

@@ -70,13 +70,3 @@
   color: white;
   font-size: 18px;
 }
-
-.no-ideas {
-    width: 100%;         
-    display: block;   
-    text-align: center;
-    font-size: 32px;
-    font-weight: bold;
-    color: black;
-    margin: 15rem auto;
-}

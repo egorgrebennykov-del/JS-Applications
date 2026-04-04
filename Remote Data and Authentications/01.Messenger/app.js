@@ -11,18 +11,17 @@ function attachEvents() {
     document.getElementById('submit').addEventListener('click', onSubmit);
     document.getElementById('refresh').addEventListener('click', onLoad);
 
-    async function onLoad()
-    {
-        try{
-            textAreaRef.value = '';
+    async function onLoad() {
+        try {
             const response = await fetch(BASE_URL);
             const data = await response.json();
 
-            Object.values(data).forEach(msg => {
-                textAreaRef.value += `${msg.author}: ${msg.content}\n`;
-            });
-        }
-        catch (error){
+            const result = Object.values(data)
+                .map(msg => `${msg.author}: ${msg.content}`)
+                .join('\n');
+
+            textAreaRef.value = result;
+        } catch (error) {
             textAreaRef.value = 'No Messages';
         }
     }

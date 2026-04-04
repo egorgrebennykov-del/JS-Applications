@@ -1,34 +1,52 @@
-function solve() {
-
-    const BASE_URL = 'http://localhost:3030/jsonstore/bus/schedule/';
+async function solve() {
     const info = document.getElementById('info');
+    const departBtn = document.getElementById('depart');
     const arriveBtn = document.getElementById('arrive');
 
-    let stopInfo = {
-        name: '',
-        next: 'depot'
-    };
+    let currentId = 'depot';
+    let nextStop = '';
+
+    info.querySelector('.info').textContent = 'Not Connected';
+    departBtn.disabled = false;
+    arriveBtn.disabled = true;
+
+    async function getStop(id) {
+        try {
+            const res = await fetch(`http://localhost:3030/jsonstore/bus/schedule/${id}`);
+            if (!res.ok) throw new Error('Network error');
+            return await res.json();
+        } catch (err) {
+            info.querySelector('.info').textContent = 'Error';
+            departBtn.disabled = true;
+            arriveBtn.disabled = true;
+            return null;
+        }
+    }
 
     async function depart() {
-        arriveBtn.disabled = false;
-        document.getElementById('depart').disabled = true;
+      departBtn.disabled = true;
+      arriveBtn.disabled = false;
 
-        const response = await fetch(BASE_URL + stopInfo.next);
-        const data = await response.json();
-        stopInfo.name = data.name;
-        stopInfo.next = data.next;
-        info.textContent = `Next stop ${data.name}`;
-    }
+      const data = await getStop(currentId);
+      if (!data) {
+          departBtn.disabled = true;
+          arriveBtn.disabled = true;
+          info.querySelector('.info').textContent = 'Error';
+          return;
+      }
 
-    async function arrive() {
+      nextStop = data.name;
+      info.querySelector('.info').textContent = `Next stop ${nextStop}`;
+      currentId = data.next;
+  }
+
+    function arrive() {
+        info.querySelector('.info').textContent = `Arriving at ${nextStop}`;
+        departBtn.disabled = false;
         arriveBtn.disabled = true;
-        info.textContent = `Arriving at ${stopInfo.name}`;
     }
 
-    return {
-        depart,
-        arrive
-    };
+    return { depart, arrive };
 }
 
 let result = solve();
